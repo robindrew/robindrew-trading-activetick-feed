@@ -22,6 +22,5 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/robindrew-common"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/robindrew-trading"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/robindrew-trading-activetick"/>
-	<classpathentry kind="lib" path="/robindrew-resources/robindrew-trading-activetick-feed"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
