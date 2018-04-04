@@ -30,14 +30,7 @@ body { padding-top: 10px; }
 <a class="navbar-brand" href="/">${serviceName} #${serviceInstance}</a>
 </div>
 <ul class="nav navbar-nav">
-<li><a href="/Accounts"><span class="glyphicon glyphicon-piggy-bank"></span> Accounts</a></li>
-<li><a href="/Positions"><span class="glyphicon glyphicon-list-alt"></span> Positions</a></li>
-<li><a href="/Instruments"><span class="glyphicon glyphicon-globe"></span> Instruments</a></li>
 <li class="active"><a href="/Feeds"><span class="glyphicon glyphicon-cloud-download"></span> Feeds</a></li>
-<li><a href="/History"><span class="glyphicon glyphicon-signal"></span> History</a></li>
-</ul>
-<ul class="nav navbar-nav navbar-right">
-<li><a href="#">${environment}</a></li>
 </ul>
 </div><!-- /.container-fluid -->
 </nav>
@@ -58,31 +51,17 @@ body { padding-top: 10px; }
 <tr class="active">
 <th>Type</th>
 <th>Name</th>
-<th>Epic</th>
 <th>Price</th>
-<th>Total Updates</th>
 <th>Last Update</th>
+<th>Total Updates</th>
 </tr>
 #foreach($feed in $feeds)
 <tr>
-<td>${feed.markets.instrument.type}</td>
-<td>${feed.markets.instrument.name}</td>
-<td><a href="/Instrument?epic=${feed.subscription.config.instrument.name}">${feed.subscription.config.instrument.name}</a></td>
-#if($feed.subscription.latestPrice)
-#if($feed.subscription.latestDirection == "BUY")
-<td class="info">
-<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>&nbsp;&nbsp;${feed.subscription.latestPrice.closePrice}
-</td>
-#else
-<td class="danger">
-<span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>&nbsp;&nbsp;${feed.subscription.latestPrice.closePrice}
-</td>
-#end
-#else
-<td>-</td>
-#end
-<td>${feed.subscription.updateCount}</td>
-<td>${feed.timeSinceLastUpdate}</td>
+<td>${feed.subscription.instrument.type}</td>
+<td>${feed.subscription.instrument.name}</td>
+<td id="${feed.id}_CloseColor" class="warning CloseColor"><span id="${feed.id}_CloseIcon" class="glyphicon glyphicon-minus CloseIcon" aria-hidden="true"></span>&nbsp;&nbsp;<span id="${feed.id}_ClosePrice">-</span></td>
+<td id="${feed.id}_LastUpdated">-</td>
+<td id="${feed.id}_UpdateCount">-</td>
 </tr>
 #end
 </table>
@@ -96,9 +75,40 @@ body { padding-top: 10px; }
 </div>
 
 
-
 <!-- JavaScript -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js" ></script>
+<script>
+$(document).ready(function () {
+	setInterval(function () {
+		$.getJSON( "/Prices", function(data) {
+			$.each(data, function(index, price) {
+				$("#" + price.id + "_ClosePrice").text(price.close);
+				$("#" + price.id + "_UpdateCount").text(price.updateCount);
+				$("#" + price.id + "_LastUpdated").text(price.lastUpdated);
+
+				var color = $("#" + price.id + "_CloseColor");
+				var icon = $("#" + price.id + "_CloseIcon");
+				if (price.direction == "BUY") {
+					color.removeClass("danger").removeClass("warning").addClass("info");
+					icon.removeClass("glyphicon-minus").removeClass("glyphicon-arrow-down").addClass("glyphicon-arrow-up");
+				}
+				if (price.direction == "SELL") {
+					color.removeClass("info").removeClass("warning").addClass("danger");
+					icon.removeClass("glyphicon-minus").removeClass("glyphicon-arrow-up").addClass("glyphicon-arrow-down");
+				}
+				if (price.direction == "STALE") {
+					color.removeClass("danger").removeClass("info").removeClass("warning");
+					icon.removeClass("glyphicon-arrow-down").removeClass("glyphicon-arrow-up").addClass("glyphicon-minus");
+				}
+			});
+		}).error(function() {
+			$(".CloseColor").removeClass("danger").removeClass("info").addClass("warning");
+			$(".CloseIcon").removeClass("glyphicon-arrow-down").removeClass("glyphicon-arrow-up").addClass("glyphicon-minus");
+		});
+	}, 500);
+});
+
+</script>
 </body>
 </html>

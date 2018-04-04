@@ -41,7 +41,8 @@ public class PricesPage extends AbstractServicePage {
 		GsonBuilder builder = new GsonBuilder();
 		builder.setPrettyPrinting();
 		Gson gson = builder.create();
-		return gson.toJson(prices);
+		String json = gson.toJson(prices);
+		return json;
 	}
 
 }

@@ -34,6 +34,7 @@ public class ActiveTickComponent extends AbstractIdleComponent {
 	private static final IProperty<String> propertyApiKey = new StringProperty("activetick.api.key");
 	private static final IProperty<String> propertyUsername = new StringProperty("activetick.username");
 	private static final IProperty<String> propertyPassword = new StringProperty("activetick.password");
+	private static final IProperty<String> propertyTickOutputDir = new StringProperty("tick.output.dir");
 
 	@Override
 	protected void startupComponent() throws Exception {
@@ -88,7 +89,7 @@ public class ActiveTickComponent extends AbstractIdleComponent {
 		AtInstrumentPriceStream priceStream = new AtInstrumentPriceStream(instrument);
 
 		// Create the output file
-		PriceTickFileSink priceFileSink = new PriceTickFileSink(instrument, new File("c:/temp/prices/activetick"));
+		PriceTickFileSink priceFileSink = new PriceTickFileSink(instrument, new File(propertyTickOutputDir.get()));
 		priceFileSink.start();
 
 		// Register the stream to make it available through the platform

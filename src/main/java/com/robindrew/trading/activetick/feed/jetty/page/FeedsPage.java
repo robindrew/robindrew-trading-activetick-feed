@@ -24,10 +24,6 @@ public class FeedsPage extends AbstractServicePage {
 	protected void execute(IHttpRequest request, IHttpResponse response, Map<String, Object> dataMap) {
 		super.execute(request, response, dataMap);
 
-//		IIgSession session = getDependency(IIgSession.class);
-//		dataMap.put("user", session.getCredentials().getUsername());
-//		dataMap.put("environment", session.getEnvironment());
-
 		ITradingPlatform platform = getDependency(ITradingPlatform.class);
 		IStreamingService service = platform.getStreamingService();
 		dataMap.put("feeds", getFeeds(service.getPriceStreams()));
@@ -52,9 +48,9 @@ public class FeedsPage extends AbstractServicePage {
 		}
 
 		public String getId() {
-			return subscription.getInstrument().getName().replace('.', '_');
+			return FeedPrice.toId(subscription.getInstrument().getName());
 		}
-		
+
 		public IInstrumentPriceStream getSubscription() {
 			return subscription;
 		}
