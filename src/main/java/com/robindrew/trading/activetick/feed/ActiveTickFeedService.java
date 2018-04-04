@@ -5,6 +5,8 @@ import com.robindrew.common.service.component.heartbeat.HeartbeatComponent;
 import com.robindrew.common.service.component.logging.LoggingComponent;
 import com.robindrew.common.service.component.properties.PropertiesComponent;
 import com.robindrew.common.service.component.stats.StatsComponent;
+import com.robindrew.trading.activetick.feed.activetick.ActiveTickComponent;
+import com.robindrew.trading.activetick.feed.jetty.JettyComponent;
 
 public class ActiveTickFeedService extends AbstractService {
 
@@ -20,6 +22,8 @@ public class ActiveTickFeedService extends AbstractService {
 	private final PropertiesComponent properties = new PropertiesComponent();
 	private final LoggingComponent logging = new LoggingComponent();
 	private final StatsComponent stats = new StatsComponent();
+	private final JettyComponent jetty = new JettyComponent();
+	private final ActiveTickComponent activeTick = new ActiveTickComponent();
 
 	public ActiveTickFeedService(String[] args) {
 		super(args);
@@ -31,6 +35,8 @@ public class ActiveTickFeedService extends AbstractService {
 		start(logging);
 		start(heartbeat);
 		start(stats);
+		start(jetty);
+		start(activeTick);
 	}
 
 	@Override
