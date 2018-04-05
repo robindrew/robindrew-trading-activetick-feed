@@ -11,7 +11,7 @@ import com.robindrew.trading.activetick.feed.jetty.JettyComponent;
 public class ActiveTickFeedService extends AbstractService {
 
 	/**
-	 * Entry point for the TurnEngine Admin Client Service.
+	 * Entry point for the ActiveTick Feed Service.
 	 */
 	public static void main(String[] args) {
 		ActiveTickFeedService service = new ActiveTickFeedService(args);
