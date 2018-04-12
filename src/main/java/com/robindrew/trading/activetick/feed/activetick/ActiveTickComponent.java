@@ -17,8 +17,8 @@ import com.robindrew.trading.IInstrument;
 import com.robindrew.trading.activetick.feed.activetick.session.SessionManager;
 import com.robindrew.trading.platform.ITradingPlatform;
 import com.robindrew.trading.platform.streaming.IStreamingService;
+import com.robindrew.trading.price.candle.io.stream.sink.PriceCandleFileSink;
 import com.robindrew.trading.price.precision.PricePrecision;
-import com.robindrew.trading.price.tick.io.stream.sink.PriceTickFileSink;
 import com.robindrew.trading.provider.activetick.platform.AtConnection;
 import com.robindrew.trading.provider.activetick.platform.AtCredentials;
 import com.robindrew.trading.provider.activetick.platform.AtInstrument;
@@ -89,7 +89,7 @@ public class ActiveTickComponent extends AbstractIdleComponent {
 		AtInstrumentPriceStream priceStream = new AtInstrumentPriceStream(instrument);
 
 		// Create the output file
-		PriceTickFileSink priceFileSink = new PriceTickFileSink(instrument, new File(propertyTickOutputDir.get()));
+		PriceCandleFileSink priceFileSink = new PriceCandleFileSink(instrument, new File(propertyTickOutputDir.get()));
 		priceFileSink.start();
 
 		// Register the stream to make it available through the platform
