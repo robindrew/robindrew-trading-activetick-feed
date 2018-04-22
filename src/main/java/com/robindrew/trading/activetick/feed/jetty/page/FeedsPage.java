@@ -13,6 +13,7 @@ import com.robindrew.common.service.component.jetty.handler.page.AbstractService
 import com.robindrew.trading.platform.ITradingPlatform;
 import com.robindrew.trading.platform.streaming.IInstrumentPriceStream;
 import com.robindrew.trading.platform.streaming.IStreamingService;
+import com.robindrew.trading.provider.activetick.platform.IAtInstrument;
 
 public class FeedsPage extends AbstractServicePage {
 
@@ -24,14 +25,14 @@ public class FeedsPage extends AbstractServicePage {
 	protected void execute(IHttpRequest request, IHttpResponse response, Map<String, Object> dataMap) {
 		super.execute(request, response, dataMap);
 
-		ITradingPlatform platform = getDependency(ITradingPlatform.class);
-		IStreamingService service = platform.getStreamingService();
+		ITradingPlatform<IAtInstrument> platform = getDependency(ITradingPlatform.class);
+		IStreamingService<IAtInstrument> service = platform.getStreamingService();
 		dataMap.put("feeds", getFeeds(service.getPriceStreams()));
 	}
 
-	private Set<Feed> getFeeds(Set<IInstrumentPriceStream> subscriptions) {
+	private Set<Feed> getFeeds(Set<IInstrumentPriceStream<IAtInstrument>> subscriptions) {
 		Set<Feed> feeds = new TreeSet<>();
-		for (IInstrumentPriceStream subscription : subscriptions) {
+		for (IInstrumentPriceStream<IAtInstrument> subscription : subscriptions) {
 			feeds.add(new Feed(subscription));
 		}
 		return feeds;
@@ -39,10 +40,10 @@ public class FeedsPage extends AbstractServicePage {
 
 	public static class Feed implements Comparable<Feed> {
 
-		private final IInstrumentPriceStream subscription;
+		private final IInstrumentPriceStream<IAtInstrument> subscription;
 		private final FeedPrice price;
 
-		public Feed(IInstrumentPriceStream subscription) {
+		public Feed(IInstrumentPriceStream<IAtInstrument> subscription) {
 			this.subscription = subscription;
 			this.price = new FeedPrice(subscription);
 		}
@@ -51,7 +52,7 @@ public class FeedsPage extends AbstractServicePage {
 			return FeedPrice.toId(subscription.getInstrument().getName());
 		}
 
-		public IInstrumentPriceStream getSubscription() {
+		public IInstrumentPriceStream<IAtInstrument> getSubscription() {
 			return subscription;
 		}
 

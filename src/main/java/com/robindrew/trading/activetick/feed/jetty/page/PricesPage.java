@@ -16,6 +16,7 @@ import com.robindrew.common.service.component.jetty.handler.page.AbstractService
 import com.robindrew.trading.platform.ITradingPlatform;
 import com.robindrew.trading.platform.streaming.IInstrumentPriceStream;
 import com.robindrew.trading.platform.streaming.IStreamingService;
+import com.robindrew.trading.provider.activetick.platform.IAtInstrument;
 
 public class PricesPage extends AbstractServicePage {
 
@@ -27,14 +28,14 @@ public class PricesPage extends AbstractServicePage {
 	protected void execute(IHttpRequest request, IHttpResponse response, Map<String, Object> dataMap) {
 		super.execute(request, response, dataMap);
 
-		ITradingPlatform platform = getDependency(ITradingPlatform.class);
-		IStreamingService service = platform.getStreamingService();
+		ITradingPlatform<IAtInstrument> platform = getDependency(ITradingPlatform.class);
+		IStreamingService<IAtInstrument> service = platform.getStreamingService();
 		dataMap.put("prices", getPrices(service.getPriceStreams()));
 	}
 
-	private String getPrices(Set<IInstrumentPriceStream> subscriptions) {
+	private String getPrices(Set<IInstrumentPriceStream<IAtInstrument>> subscriptions) {
 		List<FeedPrice> prices = new ArrayList<>();
-		for (IInstrumentPriceStream subscription : subscriptions) {
+		for (IInstrumentPriceStream<IAtInstrument> subscription : subscriptions) {
 			prices.add(new FeedPrice(subscription));
 		}
 

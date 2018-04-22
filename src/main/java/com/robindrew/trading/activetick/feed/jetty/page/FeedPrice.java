@@ -9,6 +9,7 @@ import com.robindrew.trading.price.candle.IPriceCandle;
 import com.robindrew.trading.price.candle.streaming.IPriceCandleSnapshot;
 import com.robindrew.trading.price.candle.streaming.IStreamingCandlePrice;
 import com.robindrew.trading.price.decimal.Decimals;
+import com.robindrew.trading.provider.activetick.platform.IAtInstrument;
 
 public class FeedPrice implements Comparable<FeedPrice> {
 
@@ -32,7 +33,7 @@ public class FeedPrice implements Comparable<FeedPrice> {
 	private final String updateCount;
 	private final String directionColor;
 
-	public FeedPrice(IInstrumentPriceStream subscription) {
+	public FeedPrice(IInstrumentPriceStream<IAtInstrument> subscription) {
 		IStreamingCandlePrice price = subscription.getPrice();
 		IPriceCandleSnapshot snapshot = price.getSnapshot();
 
