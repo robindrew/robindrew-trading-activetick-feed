@@ -13,18 +13,17 @@ import com.robindrew.common.mbean.annotated.AnnotatedMBeanRegistry;
 import com.robindrew.common.properties.map.type.IProperty;
 import com.robindrew.common.properties.map.type.StringProperty;
 import com.robindrew.common.service.component.AbstractIdleComponent;
-import com.robindrew.trading.IInstrument;
 import com.robindrew.trading.activetick.feed.activetick.session.SessionManager;
 import com.robindrew.trading.platform.ITradingPlatform;
-import com.robindrew.trading.platform.streaming.IStreamingService;
+import com.robindrew.trading.platform.streaming.IInstrumentPriceStream;
 import com.robindrew.trading.price.candle.io.stream.sink.PriceCandleFileSink;
 import com.robindrew.trading.price.precision.PricePrecision;
 import com.robindrew.trading.provider.activetick.platform.AtConnection;
 import com.robindrew.trading.provider.activetick.platform.AtCredentials;
 import com.robindrew.trading.provider.activetick.platform.AtInstrument;
 import com.robindrew.trading.provider.activetick.platform.AtTradingPlatform;
+import com.robindrew.trading.provider.activetick.platform.IAtInstrument;
 import com.robindrew.trading.provider.activetick.platform.history.AtHistoryService;
-import com.robindrew.trading.provider.activetick.platform.streaming.AtInstrumentPriceStream;
 import com.robindrew.trading.provider.activetick.platform.streaming.AtStreamingService;
 
 public class ActiveTickComponent extends AbstractIdleComponent {
@@ -82,21 +81,15 @@ public class ActiveTickComponent extends AbstractIdleComponent {
 		createStreamingSubscription(AtInstrument.USD_JPY, new PricePrecision(2));
 	}
 
-	private void createStreamingSubscription(IInstrument instrument, PricePrecision precision) {
-		ITradingPlatform platform = getDependency(ITradingPlatform.class);
-
-		// Create the underlying stream
-		AtInstrumentPriceStream priceStream = new AtInstrumentPriceStream(instrument);
+	private void createStreamingSubscription(IAtInstrument instrument, PricePrecision precision) {
+		AtTradingPlatform platform = getDependency(ITradingPlatform.class);
 
 		// Create the output file
 		PriceCandleFileSink priceFileSink = new PriceCandleFileSink(instrument, new File(propertyTickOutputDir.get()));
 		priceFileSink.start();
 
-		// Register the stream to make it available through the platform
-		IStreamingService streamingService = platform.getStreamingService();
-		streamingService.register(priceStream);
-
 		// Register all the sinks
+		IInstrumentPriceStream<IAtInstrument> priceStream = platform.getStreamingService().getPriceStream(instrument);
 		priceStream.register(priceFileSink);
 	}
 
