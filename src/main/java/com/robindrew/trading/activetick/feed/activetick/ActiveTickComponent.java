@@ -73,12 +73,12 @@ public class ActiveTickComponent extends AbstractIdleComponent {
 	private void createStreamingSubscriptions() {
 
 		// Currencies
-		createStreamingSubscription(AtInstrument.AUD_USD, new PricePrecision(2));
-		createStreamingSubscription(AtInstrument.EUR_JPY, new PricePrecision(2));
-		createStreamingSubscription(AtInstrument.EUR_USD, new PricePrecision(2));
-		createStreamingSubscription(AtInstrument.GBP_USD, new PricePrecision(2));
-		createStreamingSubscription(AtInstrument.USD_CHF, new PricePrecision(2));
-		createStreamingSubscription(AtInstrument.USD_JPY, new PricePrecision(2));
+		createStreamingSubscription(AtInstrument.SPOT_AUD_USD, new PricePrecision(2));
+		createStreamingSubscription(AtInstrument.SPOT_EUR_JPY, new PricePrecision(2));
+		createStreamingSubscription(AtInstrument.SPOT_EUR_USD, new PricePrecision(2));
+		createStreamingSubscription(AtInstrument.SPOT_GBP_USD, new PricePrecision(2));
+		createStreamingSubscription(AtInstrument.SPOT_USD_CHF, new PricePrecision(2));
+		createStreamingSubscription(AtInstrument.SPOT_USD_JPY, new PricePrecision(2));
 	}
 
 	private void createStreamingSubscription(IAtInstrument instrument, PricePrecision precision) {
