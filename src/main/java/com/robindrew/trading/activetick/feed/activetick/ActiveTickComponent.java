@@ -63,7 +63,7 @@ public class ActiveTickComponent extends AbstractIdleComponent {
 		AtStreamingService streaming = new AtStreamingService(connection);
 
 		// Platform
-		AtTradingPlatform platform = new AtTradingPlatform(streaming, history);
+		AtTradingPlatform platform = new AtTradingPlatform(credentials, streaming, history);
 		setDependency(ITradingPlatform.class, platform);
 
 		log.info("Subscribing ...");
